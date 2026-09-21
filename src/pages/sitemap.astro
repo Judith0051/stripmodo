@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { GUIDES, INFO_PAGES } from '../consts';
+import { url } from '../utils/url';
+
+const articles = await getCollection('articles');
+const byId = new Map(articles.map((a) => [a.id, a]));
+const home = byId.get('index')!;
+---
+
+<Base
+  title="HTML Sitemap – All Pages | Stripmodo"
+  description="A complete list of every page on Stripmodo: token safety guides, price guides, FAQs and site policies."
+  path="/sitemap/"
+>
+  <Breadcrumbs items={[{ label: 'Sitemap' }]} />
+  <div class="container">
+    <header class="article-head prose">
+      <h1>HTML Sitemap</h1>
+      <p>Every page on Stripmodo, listed in one place. For crawlers, the machine-readable version lives at <a href={`${import.meta.env.BASE_URL}sitemap-index.xml`}>sitemap.xml</a>.</p>
+    </header>
+    <div class="prose">
+      <h2>Main guides</h2>
+      <ul>
+        <li><a href={url('/')}>{home.data.h1} (Homepage)</a></li>
+        {GUIDES.map((g) => {
+          const a = byId.get(g.slug);
+          return a ? <li><a href={url(`/${g.slug}/`)}>{a.data.h1}</a></li> : null;
+        })}
+      </ul>
+      <h2>Site information</h2>
+      <ul>
+        {INFO_PAGES.map((p) => (
+          <li><a href={url(`/${p.slug}/`)}>{p.label}</a></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</Base>

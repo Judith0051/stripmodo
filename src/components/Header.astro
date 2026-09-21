@@ -1,0 +1,59 @@
+---
+import { GUIDES } from '../consts';
+import { url } from '../utils/url';
+
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+
+const nav = [
+  { label: 'Home', path: '/' },
+  ...GUIDES.map((g) => ({ label: g.navLabel, path: `/${g.slug}/` })).slice(0, 4),
+  { label: 'FAQ', path: '/stripchat-token-faq/' },
+];
+const menuLinks = [
+  { label: 'Home', path: '/' },
+  ...GUIDES.map((g) => ({ label: g.navLabel, path: `/${g.slug}/` })),
+];
+
+const here = currentPath.replace(/\/$/, '');
+const isCurrent = (path: string) => url(path).replace(/\/$/, '') === here;
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="brand" href={url('/')} aria-label="Stripmodo — home">
+      <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+        <rect x="1.5" y="1.5" width="23" height="23" rx="6" fill="#0a5d4a"></rect>
+        <path d="M8 15.5l3.4 3.4L18.6 9.7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      Stripmodo
+    </a>
+
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        {nav.map((item) => (
+          <li>
+            <a href={url(item.path)} aria-current={isCurrent(item.path) ? 'page' : undefined}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <details class="mobile-menu">
+      <summary class="menu-toggle" aria-label="Open menu">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+        </svg>
+        Menu
+      </summary>
+      <nav class="menu-panel" aria-label="Mobile">
+        {menuLinks.map((item) => (
+          <a href={url(item.path)} aria-current={isCurrent(item.path) ? 'page' : undefined}>{item.label}</a>
+        ))}
+      </nav>
+    </details>
+  </div>
+</header>

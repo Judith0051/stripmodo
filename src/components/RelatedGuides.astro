@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import { GUIDES } from '../consts';
+import { url } from '../utils/url';
+
+interface Props {
+  /** slug of the current article, excluded from the list */
+  current: string;
+  /** slugs to feature first, in order */
+  featured?: string[];
+  heading?: string;
+}
+
+const { current, featured = [], heading = 'Keep reading' } = Astro.props;
+
+const articles = await getCollection('articles');
+const byId = new Map(articles.map((a) => [a.id, a]));
+
+const orderedSlugs = [
+  ...featured,
+  ...GUIDES.map((g) => g.slug),
+].filter((slug, i, arr) => slug !== current && slug !== 'index' && arr.indexOf(slug) === i && byId.has(slug));
+
+const picks = orderedSlugs.slice(0, 3).map((slug) => byId.get(slug)!);
+---
+
+{picks.length > 0 && (
+  <section aria-labelledby="related-guides">
+    <h2 id="related-guides">{heading}</h2>
+    <div class="card-grid card-grid--3">
+      {picks.map((a) => (
+        <a class="card" href={url(`/${a.id}/`)}>
+          <h3>{a.data.cardTitle ?? a.data.h1}</h3>
+          <p>{a.data.cardDescription ?? a.data.description}</p>
+          <span class="card__go">Read the guide<span aria-hidden="true"> →</span></span>
+        </a>
+      ))}
+    </div>
+  </section>
+)}

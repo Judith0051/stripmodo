@@ -1,0 +1,58 @@
+---
+import { GUIDES, INFO_PAGES, SITE } from '../consts';
+import { url } from '../utils/url';
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h2>{SITE.name}</h2>
+        <p style="color: var(--muted); margin: 0 0 0.75rem; max-width: 34ch;">
+          Independent, safety-first guides about StripChat tokens: legitimate
+          promotions, prices, how tokens work and how to avoid scams. Not
+          affiliated with StripChat.
+        </p>
+        <p style="color: var(--muted); font-size: 0.85rem; margin: 0;">
+          Adults only (18+). Informational content, not financial advice.
+        </p>
+      </div>
+      <nav aria-label="Guides">
+        <h3>Guides</h3>
+        <ul>
+          {GUIDES.map((g) => (
+            <li><a href={url(`/${g.slug}/`)}>{g.navLabel}</a></li>
+          ))}
+        </ul>
+      </nav>
+      <nav aria-label="Site information">
+        <h3>About this site</h3>
+        <ul>
+          {INFO_PAGES.map((p) => (
+            <li><a href={url(`/${p.slug}/`)}>{p.label}</a></li>
+          ))}
+          <li><a href={url('/sitemap/')}>HTML Sitemap</a></li>
+        </ul>
+      </nav>
+      <div>
+        <h3>Safety resources</h3>
+        <ul>
+          <li><a href="https://consumer.ftc.gov/articles/how-recognize-and-avoid-phishing-scams" rel="noopener">FTC: Phishing Scams</a></li>
+          <li><a href="https://www.cisa.gov/news-events/news/avoiding-social-engineering-and-phishing-attacks" rel="noopener">CISA: Phishing Attacks</a></li>
+          <li><a href="https://www.cisa.gov/secure-our-world" rel="noopener">CISA: Secure Our World</a></li>
+          <li><a href="https://www.ic3.gov/" rel="noopener">FBI Internet Crime Center</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-note">
+      <p>
+        {SITE.name} is an independent informational project. “StripChat” is a
+        trademark of its respective owner; this site is not affiliated with,
+        endorsed by, or sponsored by StripChat. Token promotions, prices and
+        eligibility change frequently — always verify details inside your
+        official account.
+      </p>
+      <p>© 2026 {SITE.name}. Content last reviewed {SITE.updatedLong}.</p>
+    </div>
+  </div>
+</footer>

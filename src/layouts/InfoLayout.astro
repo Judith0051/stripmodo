@@ -1,0 +1,36 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Base from './Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { SITE } from '../consts';
+import { breadcrumbSchema, webPageSchema } from '../utils/schema';
+import { formatDate } from '../utils/url';
+
+interface Props {
+  entry: CollectionEntry<'info'>;
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const path = `/${entry.id}/`;
+
+const jsonLd = [
+  webPageSchema({ name: data.h1, description: data.description, path, updatedDate: data.updatedDate }),
+];
+---
+
+<Base title={data.title} description={data.description} path={path} jsonLd={jsonLd}>
+  <Breadcrumbs items={[{ label: data.h1 }]} />
+  <article class="container">
+    <header class="article-head prose">
+      <h1>{data.h1}</h1>
+      <div class="article-meta">
+        <span>Last updated: <time datetime={data.updatedDate.toISOString().slice(0, 10)}>{formatDate(data.updatedDate)}</time></span>
+        <span>{SITE.author}</span>
+      </div>
+    </header>
+    <div class="prose">
+      <slot />
+    </div>
+  </article>
+</Base>

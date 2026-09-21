@@ -1,0 +1,5 @@
+# Stripmodo robots.txt — all crawlers welcome, no resources blocked.
+User-agent: *
+Allow: /
+
+Sitemap: https://judith0051.github.io/stripmodo/sitemap-index.xml
