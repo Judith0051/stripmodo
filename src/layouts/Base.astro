@@ -1,0 +1,51 @@
+---
+import '@fontsource/geist/latin-400.css';
+import '@fontsource/geist/latin-500.css';
+import '@fontsource/geist/latin-600.css';
+import '@fontsource/geist/latin-700.css';
+import '@fontsource/geist-mono/latin-400.css';
+import '@fontsource/geist-mono/latin-600.css';
+import '../styles/global.css';
+import { SITE } from '../consts';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import StickyBar from '../components/StickyBar.astro';
+import SEO from '../components/SEO.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  image?: string;
+  type?: 'website' | 'article';
+  pubDate?: string;
+  updatedDate?: string;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown>[];
+  /** Does this page include the featured video section? (controls "Watch Video" anchor) */
+  hasVideo?: boolean;
+}
+
+const { hasVideo = false, ...seo } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="google-site-verification" content="bcjswv_sCJ61Ggfz8DWOakYpehVngbXfnLkUBVX6VWg" />
+    <link rel="icon" type="image/svg+xml" href={`${SITE.base}/favicon.svg`} />
+    <meta name="theme-color" content="#10141a" />
+    <SEO {...seo} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <Header currentPath={Astro.url.pathname} />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+    <StickyBar currentPath={Astro.url.pathname} hasVideo={hasVideo} />
+  </body>
+</html>

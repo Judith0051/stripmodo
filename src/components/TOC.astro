@@ -1,0 +1,22 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+// Keep top-level sections (H2) only for a scannable, non-nested contents list.
+const items = headings.filter((h) => h.depth === 2);
+---
+
+{items.length > 0 && (
+  <details class="toc" open>
+    <summary>Contents</summary>
+    <ol>
+      {items.map((h) => (
+        <li><a href={`#${h.slug}`}>{h.text}</a></li>
+      ))}
+    </ol>
+  </details>
+)}

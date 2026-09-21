@@ -1,0 +1,51 @@
+---
+import { CTA, OFFER_DRAW_LABEL, OFFER_SITES } from '../consts';
+import { url } from '../utils/url';
+
+interface Props {
+  currentPath: string;
+  hasVideo: boolean;
+}
+
+const { currentPath, hasVideo } = Astro.props;
+
+const here = currentPath.replace(/\/$/, '');
+const isCurrent = (p: string) => url(p).replace(/\/$/, '') === here;
+
+// "Watch Video" links to the video section on the current page when it
+// exists, otherwise to the homepage video.
+const watchHref = hasVideo ? '#watch' : url('/#watch');
+---
+
+<aside class="sticky-bar" aria-label="Quick links and third-party token offers">
+  <div class="sticky-bar__offers">
+    <span class="sticky-bar__label">
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+        <circle cx="7.5" cy="7.5" r="6.1" stroke="currentColor" stroke-width="1.4"></circle>
+        <path d="M7.5 4.2v3.6l2.3 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      {OFFER_DRAW_LABEL}
+    </span>
+    {OFFER_SITES.map((site) => (
+      <a class="offer-chip" href={site.url} target="_blank" rel="nofollow noopener">
+        {site.label}
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+          <path d="M2 8 8 2M3.5 1.8h4.7v4.7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </a>
+    ))}
+    <a class="sticky-bar__verify" href="#disclosure">third-party — verify first</a>
+  </div>
+
+  <div class="sticky-bar__nav">
+    <nav class="sticky-bar__links" aria-label="Sticky quick navigation">
+      <a href={url('/')} aria-current={isCurrent('/') ? 'page' : undefined}>Home</a>
+      <a href={url('/stripchat-free-tokens/')} aria-current={isCurrent('/stripchat-free-tokens/') ? 'page' : undefined}>Free Tokens</a>
+      <a href={url('/stripchat-token-scams/')} aria-current={isCurrent('/stripchat-token-scams/') ? 'page' : undefined}>Scam Warning</a>
+      <a href={url('/stripchat-token-faq/')} aria-current={isCurrent('/stripchat-token-faq/') ? 'page' : undefined}>FAQ</a>
+      <a href={watchHref}>Watch Video</a>
+      <a href={url('/stripchat-account-safety/')} aria-current={isCurrent('/stripchat-account-safety/') ? 'page' : undefined}>Safety Guide</a>
+    </nav>
+    <a class="sticky-bar__cta" href={url(CTA.path) + CTA.hash}>{CTA.label}</a>
+  </div>
+</aside>

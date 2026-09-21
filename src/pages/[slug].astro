@@ -1,0 +1,36 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import ArticleLayout from '../layouts/ArticleLayout.astro';
+import InfoLayout from '../layouts/InfoLayout.astro';
+
+export const getStaticPaths = (async () => {
+  const articles = await getCollection('articles');
+  const info = await getCollection('info');
+  return [
+    ...articles
+      .filter((a) => a.id !== 'index')
+      .map((entry) => ({
+        params: { slug: entry.id },
+        props: { kind: 'article' as const, entry },
+      })),
+    ...info.map((entry) => ({
+      params: { slug: entry.id },
+      props: { kind: 'info' as const, entry },
+    })),
+  ];
+}) satisfies GetStaticPaths;
+
+const { kind, entry } = Astro.props;
+const rendered = await render(entry);
+---
+
+{kind === 'article' ? (
+  <ArticleLayout entry={entry} headings={rendered.headings}>
+    <rendered.Content />
+  </ArticleLayout>
+) : (
+  <InfoLayout entry={entry}>
+    <rendered.Content />
+  </InfoLayout>
+)}

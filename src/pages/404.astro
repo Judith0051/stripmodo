@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import { GUIDES } from '../consts';
+import { url } from '../utils/url';
+---
+
+<Base
+  title="404 – Page Not Found | Stripmodo"
+  description="The page you were looking for does not exist. Browse our StripChat token safety guides from the links below."
+  path="/404/"
+  noindex
+>
+  <div class="container error-page">
+    <h1>404</h1>
+    <p>
+      This page doesn’t exist (any more). It may have been moved, renamed or the
+      address was mistyped. Pick one of the guides below to get back on track.
+    </p>
+    <p style="margin-top: 1.75rem;">
+      <a class="btn" href={url('/')}>Back to the homepage</a>
+    </p>
+    <nav aria-label="All guides" style="margin-top: 3rem;">
+      <h2 style="margin-top: 0;">All guides</h2>
+      <div class="card-grid card-grid--3" style="max-width: 60rem; margin-inline: auto; text-align: left;">
+        {GUIDES.map((g) => (
+          <a class="card" href={url(`/${g.slug}/`)}>
+            <h3>{g.navLabel}</h3>
+            <span class="card__go">Open guide →</span>
+          </a>
+        ))}
+      </div>
+    </nav>
+  </div>
+</Base>
